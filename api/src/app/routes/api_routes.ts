@@ -48,7 +48,7 @@ routes.post('/doctor/:did/appointment', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
   return appointmentsController.store(adapter)
 })
-routes.delete('/doctor/:did/appointment/:pid', (req, res, next) => {
+routes.delete('/doctor/:did/appointment/:pid/:hour', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
   return appointmentsController.delete(adapter)
 })

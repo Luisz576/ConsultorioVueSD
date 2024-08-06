@@ -3,13 +3,14 @@ import appointmentsRepository from "../repository/appointments_repository";
 
 class AppointmentsController{
   async delete(context: IHttpContext) {
-    const { did, pid } = context.getRequest().params
+    const { did, pid, hour } = context.getRequest().params
     const doctorId = Number(did)
     const patientId = Number(pid)
-    if(!isNaN(doctorId) && !isNaN(patientId)){
+    const hourSelected = Number(hour)
+    if(!isNaN(doctorId) && !isNaN(patientId) && !isNaN(hourSelected)){
       try{
         return context.getResponse().json({
-          appointment: await appointmentsRepository.delete(doctorId, patientId) // ! TODO
+          appointment: await appointmentsRepository.delete(doctorId, patientId, hourSelected)
         })
       }catch(e){
         console.error(e)
