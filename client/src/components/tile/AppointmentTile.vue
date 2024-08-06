@@ -1,11 +1,27 @@
 <script setup lang="ts">
-  import { defineProps } from 'vue'
-import http from '../../scripts/http'
+  import { defineProps, ref, type Ref } from 'vue'
+  import http from '../../scripts/http'
 
   const props = defineProps({
     appointment: Object
   })
-  // { "id": 1, "duration": 1, "hour": 1, "patientId": 1, "doctorId": 1 }
+
+  var patient: Ref<any> = ref({})
+  var loadingPatient = ref(false)
+  async function loadPatient(){
+    if(loadingPatient.value){
+      return
+    }
+    loadingPatient.value = true
+    const res = await http.get(`http://127.0.0.1:5000/api/patient/${props.appointment.patientId}`)
+    if(res.status != 200){
+      alert("Erro ao carregar paciente!")
+    }
+    patient.value = (await res.json()).patient
+    loadingPatient.value = false
+  }
+
+  loadPatient()
 
   var removing = false
   async function _remove_handler(){
@@ -21,13 +37,48 @@ import http from '../../scripts/http'
     }
     removing = false
   }
+
+  function formatHour(hour: any){
+    let h = Math.floor(Number(hour) / 2)
+    let m = Number(hour) % 2
+    return `${h > 9 ? h.toString() : "0" + h}:${m == 0 ? "00" : "30"}`
+  }
+
+  function formatDuration(duration: any){
+    switch(Number(duration)){
+      case 2:
+        return "1h"
+      case 3:
+        return "1h30m"
+      case 4:
+        return "2h"
+      case 1:
+      default:
+        return "30m"
+    }
+  }
 </script>
 
 <template>
   <div class="my-2 w-full">
-    <div class="bg-zinc-600 px-4 py-2 flex justify-stretch">
-      <div class="flex-1">
-        <p>{{ props.appointment.hour }}</p>
+    <div class="bg-zinc-200 px-4 py-2 flex justify-stretch">
+      <div class="mt-1 grid appointment-tile-content">
+       <!-- { "id": 1, "duration": 1, "hour": 1, "patientId": 1, "doctorId": 1 } -->
+        <div>
+          <p>{{ formatHour(props.appointment.hour) }}</p>
+        </div>
+        <div v-if="loadingPatient">
+          <p>Loading...</p>
+        </div>
+        <div v-else-if="patient.person != undefined">
+          <p>{{ patient.person.name }}</p>
+        </div>
+        <div v-else>
+          <p class="italic">Erro to load patient</p>
+        </div>
+        <div>
+          <p>{{ formatDuration(props.appointment.duration) }}</p>
+        </div>
       </div>
       <div class="flex-1">
         <div class="flex justify-end mr-4">
@@ -41,3 +92,10 @@ import http from '../../scripts/http'
     </div>
   </div>
 </template>
+
+<style scoped>
+  .appointment-tile-content{
+    flex: 5;
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+</style>

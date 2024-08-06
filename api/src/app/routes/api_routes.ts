@@ -31,7 +31,7 @@ routes.post('/patient', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
   return patientsController.store(adapter)
 })
-routes.post('/patient/:pid', (req, res, next) => {
+routes.get('/patient/:pid', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
   return patientsController.show(adapter)
 })

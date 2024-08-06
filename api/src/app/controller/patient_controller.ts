@@ -45,7 +45,7 @@ class PatientsController{
     try{
       if(pid && !isNaN(Number(pid)) && Number(pid) > 0){
         return context.getResponse().json({
-          doctor: await patientsRepository.get(Number(pid))
+          patient: await patientsRepository.get(Number(pid))
         })
       }
     }catch(e){

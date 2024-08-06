@@ -17,7 +17,9 @@
     loadingAppointments.value = true
     const res = await http.get(`${http.API_URL}/doctor/${props.doctorId}/appointments`)
     if(res.status == 200){
-      appointments.value = (await res.json()).appointments
+      const aps = (await res.json()).appointments
+      aps.sort((a: any, b: any) => a.hour - b.hour)
+      appointments.value = aps
     }
     loadingAppointments.value = false
   }

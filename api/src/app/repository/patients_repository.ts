@@ -43,6 +43,11 @@ class PatientsRepository{
     })
   }
   async delete(patientId: number){
+    await prisma.appointment.deleteMany({
+      where: {
+        patientId: patientId
+      }
+    })
     const patient = await prisma.patient.delete({
       where: {
         id: patientId
@@ -51,7 +56,7 @@ class PatientsRepository{
     await prisma.person.delete({
       where: {
         id: patient.personId
-      }
+      },
     })
   }
 }

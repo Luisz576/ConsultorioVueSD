@@ -44,6 +44,11 @@ class DoctorsRepository{
     })
   }
   async delete(doctorId: number){
+    await prisma.appointment.deleteMany({
+      where: {
+        doctorId: doctorId
+      }
+    })
     const doctor = await prisma.doctor.delete({
       where: {
         id: doctorId
