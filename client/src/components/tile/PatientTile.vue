@@ -2,7 +2,7 @@
   import http from '@/scripts/http';
   import { defineProps } from 'vue'
   const props = defineProps({
-    doctor: Object
+    patient: Object
   })
 
   var removing = false
@@ -18,10 +18,10 @@
   function delete_handler(){
     if(!removing){
       removing = true
-      http.delete(`http://127.0.0.1:5000/api/doctor/${props.doctor!.id}`).then((res) => {
+      http.delete(`http://127.0.0.1:5000/api/patient/${props.patient!.id}`).then((res) => {
         if(res.status == 200){
           removed = true
-          window.open('http://localhost:5173/doctors', '_self')
+          window.open('http://localhost:5173/patients', '_self')
         }
       }).catch((e) => {
         console.error(e)
@@ -30,25 +30,12 @@
       })
     }
   }
-
-  function _appointments_handler(){
-    if(props.doctor){
-      window.open(`http://localhost:5173/doctor/${props.doctor.id}/appointments`, '_self')
-    }else{
-      alert('Erro!')
-    }
-  }
 </script>
 
 <template>
-  <div class="bg-zinc-300 mb-4 px-4 py-2 flex justify-stretch" v-if="props.doctor != undefined">
+  <div class="bg-zinc-300 mb-4 px-4 py-2 flex justify-stretch" v-if="props.patient != undefined">
     <div class="flex-1 flex items-center">
-      <div class="hover:cursor-pointer" @click="_appointments_handler">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-        </svg>
-      </div>
-      <p class="ml-2 text-lg font-bold">{{ props.doctor.person.name }} - {{ formatCPF(props.doctor.person.cpf) }}</p>
+      <p class="text-lg font-bold">{{ props.patient.person.name }} - {{ formatCPF(props.patient.person.cpf) }}</p>
     </div>
     <div class="flex flex-1 justify-end">
       <button class="mr-4 bg-red-800 hover:bg-red-900 flex justify-center items-center px-4 py-2" @click="delete_handler">

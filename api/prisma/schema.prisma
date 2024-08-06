@@ -35,7 +35,7 @@ model Patient {
 model Appointment {
   id        Int      @id @default(autoincrement())
   duration  Int      @default(1)
-  data      DateTime
+  hour  Int @unique
   patient   Patient  @relation(fields: [patientId], references: [id])
   patientId Int
   doctor    Doctor   @relation(fields: [doctorId], references: [id])

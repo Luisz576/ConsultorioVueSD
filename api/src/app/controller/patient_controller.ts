@@ -1,12 +1,12 @@
 import IHttpContext from "../../core/contracts/http/ihttp_context";
-import doctorsRepository from "../repository/doctors_repository";
+import patientsRepository from "../repository/patients_repository";
 
-class DoctorsController{
+class PatientsController{
   async store(context: IHttpContext){
-    const { universityDegree, personData } = context.getRequest().body
+    const { personData } = context.getRequest().body
     try{
-      if(universityDegree && personData && personData.name && personData.cpf){
-        await doctorsRepository.create(universityDegree, personData)
+      if(personData && personData.name && personData.cpf){
+        await patientsRepository.create(personData)
         return context.getResponse().sendStatus(200)
       }
     }catch(e){
@@ -17,9 +17,9 @@ class DoctorsController{
   }
   async index(context: IHttpContext){
     try{
-      const doctors = await doctorsRepository.getAll()
+      const patients = await patientsRepository.getAll()
       return context.getResponse().json({
-        doctors: doctors
+        patients: patients
       })
     }catch(e){
       console.error(e)
@@ -28,10 +28,10 @@ class DoctorsController{
     return context.getResponse().sendStatus(400)
   }
   async delete(context: IHttpContext){
-    const { did } = context.getRequest().params
+    const { pid } = context.getRequest().params
     try{
-      if(did && !isNaN(Number(did)) && Number(did) > 0){
-        await doctorsRepository.delete(Number(did))
+      if(pid && !isNaN(Number(pid)) && Number(pid) > 0){
+        await patientsRepository.delete(Number(pid))
         return context.getResponse().sendStatus(200)
       }
     }catch(e){
@@ -41,11 +41,11 @@ class DoctorsController{
     return context.getResponse().sendStatus(400)
   }
   async show(context: IHttpContext){
-    const { did } = context.getRequest().params
+    const { pid } = context.getRequest().params
     try{
-      if(did && !isNaN(Number(did)) && Number(did) > 0){
+      if(pid && !isNaN(Number(pid)) && Number(pid) > 0){
         return context.getResponse().json({
-          doctor: await doctorsRepository.get(Number(did))
+          doctor: await patientsRepository.get(Number(pid))
         })
       }
     }catch(e){
@@ -56,6 +56,6 @@ class DoctorsController{
   }
 }
 
-const doctorsController = new DoctorsController()
+const patientsController = new PatientsController()
 
-export default doctorsController
+export default patientsController

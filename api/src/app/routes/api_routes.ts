@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import ExpressAdapter from '../adapter/express_adapter'
 import doctorsController from '../controller/doctors_controller'
+import patientsController from '../controller/patient_controller'
+import appointmentsController from '../controller/appointments_controller'
 
 const routes = Router()
 
@@ -21,48 +23,34 @@ routes.delete('/doctor/:did', (req, res, next) => {
   return doctorsController.delete(adapter)
 })
 
-routes.get('/clients', (req, res, next) => {
+routes.get('/patients', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
-  return adapter.getResponse().json({
-    // ! TODO
-  })
+  return patientsController.index(adapter)
 })
-routes.post('/client', (req, res, next) => {
+routes.post('/patient', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
-  return adapter.getResponse().json({
-    // ! TODO
-  })
+  return patientsController.store(adapter)
 })
-routes.delete('/client/:did', (req, res, next) => {
+routes.post('/patient/:pid', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
-  return adapter.getResponse().json({
-    // ! TODO
-  })
+  return patientsController.show(adapter)
+})
+routes.delete('/patient/:pid', (req, res, next) => {
+  const adapter = new ExpressAdapter(req, res, next)
+  return patientsController.delete(adapter)
 })
 
 routes.get('/doctor/:did/appointments', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
-  return adapter.getResponse().json({
-    // ! TODO
-  })
+  return appointmentsController.index(adapter)
 })
 routes.post('/doctor/:did/appointment', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
-  return adapter.getResponse().json({
-    // ! TODO
-  })
+  return appointmentsController.store(adapter)
 })
-routes.patch('/doctor/appointment/:aid', (req, res, next) => {
+routes.delete('/doctor/:did/appointment/:pid', (req, res, next) => {
   const adapter = new ExpressAdapter(req, res, next)
-  return adapter.getResponse().json({
-    // ! TODO
-  })
-})
-routes.delete('doctor/appointment/:aid', (req, res, next) => {
-  const adapter = new ExpressAdapter(req, res, next)
-  return adapter.getResponse().json({
-    // ! TODO
-  })
+  return appointmentsController.delete(adapter)
 })
 
 export default routes
