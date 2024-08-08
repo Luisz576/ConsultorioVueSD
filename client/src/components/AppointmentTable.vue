@@ -32,12 +32,34 @@
     <div v-if="loadingAppointments">
       <p>Carregando...</p>
     </div>
+    <div v-else-if="appointments.length > 0">
+      <div class="my-2 w-full">
+        <div class="bg-zinc-400 px-4 py-2 flex justify-stretch">
+          <div class="mt-1 grid appointment-header-content">
+            <div>
+              <p class="font-bold text-lg">Hora</p>
+            </div>
+            <div>
+              <p class="font-bold text-lg">Paciente</p>
+            </div>
+            <div>
+              <p class="font-bold text-lg">Duração</p>
+            </div>
+          </div>
+          <div class="flex-1"></div>
+        </div>
+      </div>
+        <AppointmentTile v-for="appointment in appointments" :key="appointment.id" :appointment="appointment"></AppointmentTile>
+      </div>
     <div v-else>
-      <AppointmentTile v-for="appointment in appointments" :key="appointment.id" :appointment="appointment"></AppointmentTile>
+      <p>Nenhuma consulta marcada!</p>
     </div>
   </div>
 </template>
 
 <style scoped>
-
+  .appointment-header-content{
+    flex: 5;
+    grid-template-columns: 1fr 2fr 1fr;
+  }
 </style>
