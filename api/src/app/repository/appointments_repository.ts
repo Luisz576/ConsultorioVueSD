@@ -2,7 +2,6 @@ import prisma from "../services/prisma"
 
 class AppointmentsRepository{
   async delete(doctorId: number, patientId: number, hour: number) {
-    console.log(doctorId, patientId, hour)
     return await prisma.appointment.deleteMany({
       where: {
         doctorId: doctorId,
